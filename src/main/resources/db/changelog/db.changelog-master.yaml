@@ -1,0 +1,424 @@
+databaseChangeLog:
+  - changeSet:
+        id: 1
+        author: illia.kriukov
+        changes:
+          - createTable:
+              tableName: study_class
+              columns:
+                - column:
+                    name: id
+                    type: int
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: name
+                    type: varchar(50)
+                    constraints:
+                      nullable: false
+  - changeSet:
+        id: 2
+        author: illia.kriukov
+        changes:
+          - createTable:
+              tableName: grade_level
+              columns:
+                - column:
+                    name: id
+                    type: int
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: name
+                    type: varchar(50)
+                    constraints:
+                      nullable: false
+  - changeSet:
+        id: 3
+        author: illia.kriukov
+        changes:
+          - createTable:
+              tableName: study_group
+              columns:
+                - column:
+                    name: id
+                    type: int
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: name
+                    type: varchar(50)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: grade_level_id
+                    type: int
+                    constraints:
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_study_group_grade_level_id
+                      reference: grade_level(id)
+                - column:
+                    name: study_class_id
+                    type: int
+                    constraints:
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_study_group_study_class_id
+                      reference: study_class(id)
+                - column:
+                    name: min_seats
+                    type: int
+                    constraints:
+                      nullable: false
+                - column:
+                    name: max_seats
+                    type: int
+                    constraints:
+                      nullable: false
+          - addForeignKeyConstraint:
+              baseColumnNames: grade_level_id
+              baseTableName: study_group
+              constraintName: fk_study_group_grade_level_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: grade_level
+          - addForeignKeyConstraint:
+              baseColumnNames: study_class_id
+              baseTableName: study_group
+              constraintName: fk_study_group_study_class_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: study_class
+  - changeSet:
+        id: 4
+        author: illia.kriukov
+        changes:
+          - createTable:
+              tableName: subject_type
+              columns:
+                - column:
+                    name: id
+                    type: int
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: name
+                    type: varchar(50)
+                    constraints:
+                      nullable: false
+  - changeSet:
+        id: 5
+        author: illia.kriukov
+        changes:
+          - createTable:
+              tableName: subject
+              columns:
+                - column:
+                    name: id
+                    type: int
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: name
+                    type: varchar(50)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: grade_level_id
+                    type: int
+                    constraints:
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_subject_grade_level_id
+                      reference: grade_level(id)
+                - column:
+                    name: subject_type_id
+                    type: int
+                    constraints:
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_subject_subject_type_id
+                      reference: subject_type(id)
+          - addForeignKeyConstraint:
+              baseColumnNames: grade_level_id
+              baseTableName: subject
+              constraintName: fk_subject_grade_level_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: grade_level
+          - addForeignKeyConstraint:
+              baseColumnNames: subject_type_id
+              baseTableName: subject
+              constraintName: fk_subject_subject_type_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: subject_type
+  - changeSet:
+        id: 6
+        author: illia.kriukov
+        changes:
+          - createTable:
+              tableName: student
+              columns:
+                - column:
+                    name: id
+                    type: int
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: first_name
+                    type: varchar(50)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: last_name
+                    type: varchar(50)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: email
+                    type: varchar(50)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: password
+                    type: varchar(50)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: grade_level_id
+                    type: int
+                    constraints:
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_student_grade_level_id
+                      reference: grade_level(id)
+                - column:
+                    name: study_class_id
+                    type: int
+                    constraints:
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_student_study_class_id
+                      reference: study_class(id)
+          - addForeignKeyConstraint:
+              baseColumnNames: grade_level_id
+              baseTableName: student
+              constraintName: fk_student_grade_level_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: grade_level
+          - addForeignKeyConstraint:
+              baseColumnNames: study_class_id
+              baseTableName: student
+              constraintName: fk_student_study_class_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: study_class
+  - changeSet:
+        id: 7
+        author: illia.kriukov
+        changes:
+          - createTable:
+              tableName: study_group_subject
+              columns:
+                - column:
+                    name: study_group_id
+                    type: int
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_study_group_subject_study_group_id
+                      reference: study_group(id)
+                - column:
+                    name: subject_id
+                    type: int
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_study_group_subject_subject_id
+                      reference: subject(id)
+          - addForeignKeyConstraint:
+              baseColumnNames: study_group_id
+              baseTableName: study_group_subject
+              constraintName: fk_study_group_subject_study_group_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: study_group
+          - addForeignKeyConstraint:
+              baseColumnNames: subject_id
+              baseTableName: study_group_subject
+              constraintName: fk_study_group_subject_subject_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: subject
+  - changeSet:
+        id: 8
+        author: illia.kriukov
+        changes:
+          - createTable:
+              tableName: subject_student
+              columns:
+                - column:
+                    name: student_id
+                    type: int
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_subject_student_student_id
+                      reference: student(id)
+                - column:
+                    name: subject_id
+                    type: int
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_subject_student_subject_id
+                      reference: subject(id)
+          - addForeignKeyConstraint:
+              baseColumnNames: student_id
+              baseTableName: subject_student
+              constraintName: fk_subject_student_student_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: student
+          - addForeignKeyConstraint:
+              baseColumnNames: subject_id
+              baseTableName: subject_student
+              constraintName: fk_subject_student_subject_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: subject
+  - changeSet:
+        id: 9
+        author: illia.kriukov
+        changes:
+          - createTable:
+              tableName: study_group_student
+              columns:
+                - column:
+                    name: student_id
+                    type: int
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_study_group_student_student_id
+                      reference: student(id)
+                - column:
+                    name: study_group_id
+                    type: int
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_study_group_student_study_group_id
+                      reference: study_group(id)
+          - addForeignKeyConstraint:
+              baseColumnNames: student_id
+              baseTableName: study_group_student
+              constraintName: fk_study_group_student_student_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: student
+          - addForeignKeyConstraint:
+              baseColumnNames: study_group_id
+              baseTableName: study_group_student
+              constraintName: fk_study_group_student_study_group_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: study_group
+  - changeSet:
+        id: 10
+        author: illia.kriukov
+        changes:
+          - createTable:
+              tableName: unplaced_student
+              columns:
+                - column:
+                    name: student_id
+                    type: int
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_unplaced_student_student_id
+                      reference: student(id)
+                - column:
+                    name: subject_id
+                    type: int
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                      foreignKey: true
+                      foreignKeyName: fk_unplaced_student_subject_id
+                      reference: subject(id)
+          - addForeignKeyConstraint:
+              baseColumnNames: student_id
+              baseTableName: unplaced_student
+              constraintName: fk_unplaced_student_student_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: student
+          - addForeignKeyConstraint:
+              baseColumnNames: subject_id
+              baseTableName: unplaced_student
+              constraintName: fk_unplaced_student_subject_id
+              onDelete: CASCADE
+              onUpdate: RESTRICT
+              referencedColumnNames: id
+              referencedTableName: subject
+  - changeSet:
+        id: 11
+        author: illia.kriukov
+        changes:
+          - createTable:
+              tableName: groups_template
+              columns:
+                - column:
+                    name: id
+                    type: int
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: name
+                    type: varchar(50)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: groups_amount
+                    type: int
+                    constraints:
+                      nullable: false

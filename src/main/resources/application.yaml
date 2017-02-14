@@ -1,0 +1,12 @@
+spring:
+  jpa:
+    generate-ddl: false
+  datasource:
+    url: @database.url@
+    username: @database.user@
+    password: @database.password@
+    driver-class-name: @database.driverClassName@
+  h2:
+    console:
+      enabled: true
+      path: /console
